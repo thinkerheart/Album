@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Album</string>
+
+    //Exception messages
+    <string name="exception_message_generic">There was an application error</string>
+    <string name="exception_message_no_connection">There is no internet connection</string>
+
+    //PhotoUIModelListActivity
+    <string name="url">URL</string>
+    <string name="url_thumbnail">thumbnailUrl</string>
+    <string name="just_for_test">Just for test:</string>
+    <string name="items">items</string>
+
+    //PhotoUIModelListViewModel
+    <string name="mode_operation_online">Operation Mode: Online</string>
+    <string name="mode_operation_offline">Operation Mode: Offline</string>
+
+</resources>
