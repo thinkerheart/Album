@@ -16,9 +16,9 @@ public interface IPhotoRepository {
     Observable<Photo> getRemotePhotos();
 
     /**
-     * get photo data from local database
+     * get _limit photos from position _offset from room database order by _orderByColumnName asc
      * */
-    Observable<Photo> getLocalPhotos();
+    Observable<Photo> getLocalPhotos(String _orderByColumnName, int _limit, int _offset);
 
     /**
      * save data of a photo to local database
