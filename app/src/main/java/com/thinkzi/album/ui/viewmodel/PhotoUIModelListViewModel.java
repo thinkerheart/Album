@@ -102,7 +102,10 @@ public class PhotoUIModelListViewModel extends BaseViewModel {
             _watchRemotePhotosUseCase.execute(new WatchRemotePhotosObserver(), null);
         } else {
             _operationMode.setValue(_context.getResources().getString(R.string.mode_operation_offline));
-            _watchLocalPhotosUseCase.execute(new WatchLocalPhotosObserver(), null);
+
+            // this UseCase execute many small queries to get all photos from room local database
+            // STARTING small query will get 50 photos from position 0 order by id asc
+            _watchLocalPhotosUseCase.execute(new WatchLocalPhotosObserver(), WatchLocalPhotosUseCase.Ps.forPs("id", 50, 0));
         }
 
     }

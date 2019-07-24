@@ -54,10 +54,12 @@ public class PhotoRepository implements IPhotoRepository {
 
     @Inject
     public PhotoRepository(PhotoDataModelMapper _photoDataModelMapper, Context _context, ThreadExecutor _threadExecutor, PostExecutionThread _postExecutionThread) {
+
         this._photoDataModelMapper = _photoDataModelMapper;
         this._context = _context;
         this._threadExecutor = _threadExecutor;
         this._postExecutionThread = _postExecutionThread;
+
     }
 
     @Override
@@ -117,22 +119,35 @@ public class PhotoRepository implements IPhotoRepository {
     }
 
     @Override
-    public Observable<Photo> getLocalPhotos() {
+    public Observable<Photo> getLocalPhotos(final String _orderByColumnName, final int _limit, final int _offset) {
 
         // use Room to get photos from local database and return a Observable<Photo> stream
         return Observable.create(new ObservableOnSubscribe<Photo>() {
             @Override
-            public void subscribe(ObservableEmitter<Photo> emitter) throws Exception {
+            public void subscribe(final ObservableEmitter<Photo> emitter) throws Exception {
 
                 try {
 
                     // get all photos from local database
-                    List<PhotoDataModel> _photoDataModelList = AlbumApplicationDatabase.getInstance(_context).getPhotoDAO().getPhotoDataModelList();
+                    //List<PhotoDataModel> _photoDataModelList = AlbumApplicationDatabase.getInstance(_context).getPhotoDAO().getPhotoDataModelList();
 
-                    for (PhotoDataModel _photoDataModel : _photoDataModelList) {
+                    // get amount of photo
+                    int _amountOfPhoto = AlbumApplicationDatabase.getInstance(_context).getPhotoDAO().getAmountOfPhoto();
 
-                        // send photo data object as a stream to observers
-                        emitter.onNext(_photoDataModelMapper.transform(_photoDataModel));
+                    // execute many small queries to get all photos from room local database
+                    // STARTING small query will get _limit photos from position _offset order by _orderByColumnName asc
+                    for (int i = _offset; i < _amountOfPhoto; i = i + _limit) {
+
+                        // get _limit photos from position _offset from local room database order by _orderByColumnName asc
+                        List<PhotoDataModel> _photoDataModelListWithAmountOfLimit = AlbumApplicationDatabase.getInstance(_context).getPhotoDAO().getPhotoDataModelList(_orderByColumnName, _limit, i);
+
+                        // after each small query result -> send result as stream to observers
+                        for (PhotoDataModel _photoDataModel : _photoDataModelListWithAmountOfLimit) {
+
+                            // send photo data object as a stream to observers
+                            emitter.onNext(_photoDataModelMapper.transform(_photoDataModel));
+
+                        }
 
                     }
 

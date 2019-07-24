@@ -45,12 +45,24 @@ public interface PhotoDAO {
      * get data of a photo with id parameter of photo
      * */
     @Query("select * from Photos where id ==:id")
-    PhotoDataModel getPhotoDataModel(String id);
+    PhotoDataModel getPhotoDataModel(int id);
 
     /**
      * get data of a photo from room database
      * */
     @Query("select * from Photos limit 1")
     PhotoDataModel getPhotoDataModel();
+
+    /**
+     * get limit photos from position offset from room database order by orderByColumnName asc
+     * */
+    @Query("select * from Photos order by :orderByColumnName asc limit :limit offset :offset")
+    List<PhotoDataModel> getPhotoDataModelList(String orderByColumnName, int limit, int offset);
+
+    /**
+     * get amount of photo from room database
+     * */
+    @Query("select count(*) from Photos")
+    int getAmountOfPhoto();
 
 }
