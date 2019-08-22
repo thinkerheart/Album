@@ -20,7 +20,7 @@ public abstract class AsynchronousRxUseCase {
     // observer set for work result
     private final CompositeDisposable _compositeDisposables;
 
-    AsynchronousRxUseCase(ThreadExecutor _threadExecutor, PostExecutionThread _postExecutionThread) {
+    protected AsynchronousRxUseCase(ThreadExecutor _threadExecutor, PostExecutionThread _postExecutionThread) {
 
         this._threadExecutor = _threadExecutor;
         this._postExecutionThread = _postExecutionThread;
@@ -44,12 +44,24 @@ public abstract class AsynchronousRxUseCase {
     /**
      * add a observer
      * */
-    void addDisposable(Disposable _disposable) {
+    public void addDisposable(Disposable _disposable) {
 
         Checker.checkNotNull(_disposable);
         Checker.checkNotNull(_compositeDisposables);
 
         _compositeDisposables.add(_disposable);
 
+    }
+
+    public ThreadExecutor getThreadExecutor() {
+        return _threadExecutor;
+    }
+
+    public PostExecutionThread getPostExecutionThread() {
+        return _postExecutionThread;
+    }
+
+    public CompositeDisposable getCompositeDisposables() {
+        return _compositeDisposables;
     }
 }
