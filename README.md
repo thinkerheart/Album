@@ -14,4 +14,4 @@ Architectures & Patterns : Clean Architecture, Android MVVM
 
 Language : Java
 
-Frameworks & Libraries : Android Data Binding, Live Data, RxJava, RxAndroid, Dagger, Retrofit, Room, Room-RxJava, Picasso
+Frameworks & Libraries : Android Data Binding, Live Data, RxJava, RxAndroid, Dagger, Retrofit, Room, Room-RxJava, Picasso, JUnit, Mockito
