@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -56,6 +58,23 @@ public class CompletableUseCaseTest {
     public void buildCompletableUseCaseTestCase() {
         this._completableUseCase.execute(this._completableObserver, Ps.EMPTY);
         assertTrue(!this._completableObserver._isCompleted);
+    }
+
+    @Test
+    public void executeWithNotNullObserverTestCase() {
+        this._completableUseCase.execute(this._completableObserver, Ps.EMPTY);
+        assertFalse(this._completableUseCase.getCompositeDisposables().isDisposed());
+        assertEquals(1, this._completableUseCase.getCompositeDisposables().size());
+
+        this._completableUseCase.dispose();
+        assertTrue(this._completableUseCase.getCompositeDisposables().isDisposed());
+        assertEquals(0, this._completableUseCase.getCompositeDisposables().size());
+    }
+
+    @Test
+    public void executeWithNullObserverTestCase() {
+        expectedException.expect(NullPointerException.class);
+        this._completableUseCase.execute(null, Ps.EMPTY);
     }
 
     private static class CompletableUseCaseTestClass extends CompletableUseCase<Ps> {
